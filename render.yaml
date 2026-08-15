@@ -2,6 +2,7 @@ services:
   - type: web
     name: livefooty
     runtime: node
+    rootDir: livefooty
     plan: free
     autoDeploy: true
     buildCommand: npm run build
