@@ -1,5 +1,3 @@
-import puppeteer from 'puppeteer'
-
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
 const AD_RE = /consentmanager|googleads|doubleclick|googlesyndication|googleadservices|safeframe|privacy|googletagmanager/i
 const IDLE = 5 * 60 * 1000
@@ -8,6 +6,11 @@ let browser = null
 let idleTimer = null
 
 async function getBrowser() {
+  let puppeteer
+  try {
+    ;({ default: puppeteer } = await import('puppeteer'))
+  } catch { return null }
+  if (!puppeteer) return null
   if (!browser || !browser.connected) {
     browser = await puppeteer.launch({
       headless: 'new',
@@ -68,6 +71,7 @@ function collectHits(page, hits, m3u8s, label) {
 // site's JS has injected it (Blogger loads players client-side).
 export async function extractWithBrowser(url, label = 'EpicSports') {
   const b = await getBrowser()
+  if (!b) return []
   const page = await b.newPage()
   await page.setUserAgent(UA)
   const hits = []
