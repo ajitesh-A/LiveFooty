@@ -1,0 +1,12 @@
+node_modules/
+**/node_modules/
+dist/
+!livefooty/frontend/dist/
+livefooty/backend/data/
+.livefooty/backend/data/
+livefooty/backend/.env
+livefooty/frontend/.env
+.env
+**/.env
+*.log
+.playwright-mcp/

@@ -1,0 +1,17 @@
+# Syntax maybe v4+
+services:
+  app:
+    build: .
+    image: livefooty-backend
+    ports:
+      - '3001:3001'
+    environment:
+      - PORT=3001
+      - FOOTBALL_DATA_API_KEY=${FOOTBALL_DATA_API_KEY:-}
+    volumes:
+      # persistent match archive + cached lineups (survives rebuilds)
+      - livefooty-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  livefooty-data:
