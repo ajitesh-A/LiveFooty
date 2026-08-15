@@ -30,7 +30,26 @@ app.use('/api/proxy', streamRouter)
 app.use('/api/archive', archiveRouter)
 app.use('/api/auth', authRouter)
 
-app.get('/api/health', (_, res) => res.json({ ok: true }))
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, pid: process.pid, uptime: Math.round(process.uptime()) })
+})
+
+let lastExternal = Date.now()
+app.use((req, res, next) => { lastExternal = Date.now(); next() })
+
+function keepaliveTick() {
+  const PUBLIC_URL = process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || ''
+  if (!PUBLIC_URL) return
+  const idle = Date.now() - lastExternal
+  if (idle > 15 * 60 * 1000) {
+    console.warn('[keepalive] no external traffic for ' + Math.round(idle / 1000) + 's; waking')
+  }
+  fetch(PUBLIC_URL + '/api/health', { signal: AbortSignal.timeout(8000) })
+    .then((r) => { if (!r.ok) throw new Error('status ' + r.status) })
+    .then(() => console.log('[keepalive] self-check ok ' + new Date().toISOString()))
+    .catch((e) => console.error('[keepalive] self-check failed: ' + e.message))
+}
+setInterval(keepaliveTick, 4 * 60 * 1000)
 
 const DIST = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),

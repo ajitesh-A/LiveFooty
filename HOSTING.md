@@ -205,3 +205,28 @@ front for HTTPS (same Caddyfile as §A5).
 - **Email in dev mode:** without `RESEND_API_KEY`, codes are written to
   `backend/data/dev-mail.log` and the console; a fresh `dev-mail.log` will be created
   on the server too — delete it in production once real mail is configured.
+
+---
+
+## Render Free (no VPS, keeps data on app disk)
+
+**Cost:** . No credit card needed. Free tier: one web service (512 MB RAM), which **spins down after 15 min of no traffic** and sleeps in the morning (free instances can go offline).
+
+**Keep-alive + offline detection (built in):**
+1. ackend/src/index.js tracks lastExternal request time.
+2. Every 4 min a keeper pings PUBLIC_URL/api/health (auto-derived from RENDER_EXTERNAL_URL).
+3. If no external traffic for >15 min, it logs a warning and the ping wakes the instance.
+4. GET /api/health returns { ok, pid, uptime } — used by Render's health check.
+
+**Limits to accept on free:**
+- Instance can sleep; first visit after idle adds a cold-start delay (~10-30 s).
+- No persistent disk on free — ackend/data/ (users, secret.key, archive) **resets on each new deploy**. Emails/dev codes regenerate; existing sessions invalidate. Acceptable for a hobby site; upgrade to a paid instance or a tiny VPS (Hetzner) for persistent data.
+
+**Deploy (Blueprint):**
+`sh
+# 1. Push repo to GitHub (done).
+# 2. render.com -> New -> Blueprint -> select LiveFooty repo.
+# 3. Render reads render.yaml (build: npm ci && npm run build; start: npm run start).
+# 4. Add env vars in Render dashboard: FOOTBALL_DATA_API_KEY, RESEND_API_KEY, MAIL_FROM.
+# 5. Wait for deploy; open https://<app>.onrender.com. Health check hits /api/health.
+`
