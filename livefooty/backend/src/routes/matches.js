@@ -18,7 +18,8 @@ export async function getSchedule() {
   const live = await getOfficialScores()
 
   const merged = []
-  for (const league of Object.keys(LEAGUE_IDS)) {
+  const leagues = [...new Set([...Object.keys(LEAGUE_IDS), ...Object.keys(live)])]
+  for (const league of leagues) {
     const real = (live[league] || []).slice(0, MAX_PER_LEAGUE)
     if (real.length) merged.push(...real)
   }

@@ -23,7 +23,8 @@ export async function getOfficialScores() {
   const theSportsDb = tsdbResult.status === 'fulfilled' ? tsdbResult.value : null
 
   const byLeague = {}
-  for (const league of Object.keys(LEAGUE_IDS)) {
+  const leagues = [...new Set([...Object.keys(LEAGUE_IDS), ...(footballData ? Object.keys(footballData) : [])])]
+  for (const league of leagues) {
     if (footballData && footballData[league] && footballData[league].length) {
       byLeague[league] = footballData[league]
       continue

@@ -40,6 +40,12 @@ export const LEAGUES = [
   { id: 'Serie A', name: 'Serie A', emoji: '🇮🇹' },
   { id: 'Bundesliga', name: 'Bundesliga', emoji: '🇩🇪' },
   { id: 'Ligue 1', name: 'Ligue 1', emoji: '🇫🇷' },
+  { id: 'Championship', name: 'Championship', emoji: '🏴‍☠️' },
+  { id: 'Eredivisie', name: 'Eredivisie', emoji: '🇳🇱' },
+  { id: 'Primeira Liga', name: 'Primeira Liga', emoji: '🇵🇹' },
+  { id: 'Brasileirão', name: 'Brasileirão', emoji: '🇧🇷' },
+  { id: 'European Championship', name: 'Euro', emoji: '🏆' },
+  { id: 'FIFA World Cup', name: 'World Cup', emoji: '🌍' },
 ]
 
 let authToken = null

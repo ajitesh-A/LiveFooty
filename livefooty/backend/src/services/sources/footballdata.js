@@ -6,11 +6,17 @@ const TIMEOUT = 12000
 
 export const COMPETITIONS = {
   'Premier League': 'PL',
+  'Championship': 'ELC',
   'La Liga': 'PD',
-  'Serie A': 'SA',
   'Bundesliga': 'BL1',
+  'Serie A': 'SA',
   'Ligue 1': 'FL1',
+  'Eredivisie': 'DED',
+  'Primeira Liga': 'PPL',
+  'Brasileirão': 'BSA',
   'UEFA Champions League': 'CL',
+  'European Championship': 'EC',
+  'FIFA World Cup': 'WC',
 }
 
 function pad(n) {
